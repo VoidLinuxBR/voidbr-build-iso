@@ -292,7 +292,7 @@ jobs:
             <b>Kernel      :</b> <code>${KERNEL_VERSION}</code>
             <b>Tmate       :</b> <code>${DEBUG}</code>
             <b>Tam ISO     :</b> <code>${iso_size}</code>
-            <b>Download    :</b> <a href='${DOWNLOAD_URL_ISO}'>${ISO_BASE_NAME}.iso</a>
+            <b>Download    :</b> <a href='${DOWNLOAD_URL_ISO}'>${ISO_BASE_NAME}.iso</a> (${iso_size})
             <b>Download    :</b> <a href='${DOWNLOAD_URL_ISO}'>${ISO_BASE_NAME}.iso.md5</a>
             <b>Download    :</b> <a href='${DOWNLOAD_URL_ZIP}'>${ISO_BASE_NAME}.zip</a>
             <b>Download    :</b> <a href='${DOWNLOAD_URL_GZ}'>${ISO_BASE_NAME}.tar.gz</a>"
