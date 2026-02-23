@@ -81,7 +81,7 @@ runs:
     - name: Export ISO_BASENAME
       shell: bash
       run: |
-        echo "ISO_BASENAME=${{ inputs.iso_baeename }}" >> $GITHUB_ENV
+        echo "ISO_BASENAME=${{ inputs.iso_basename }}" >> $GITHUB_ENV
 
     - name: Debug teste_input
       shell: bash
