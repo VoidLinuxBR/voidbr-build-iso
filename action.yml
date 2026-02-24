@@ -204,7 +204,7 @@ runs:
         }
         configure_users_path
 
-    - name: Build ISO ${{ inputs.edition }}
+    - name: Build ISO ${{ matrix.edition }}
       id: build_id
       if: ${{ inputs.teste_input != true }}
       shell: bash
@@ -215,7 +215,6 @@ runs:
         EDITION: "${{ inputs.edition }}"
         RELEASE_TAG: "${{ inputs.release_tag }}"
       run: |
-        #BUILD ISO Image
         source /tmp/send_telegram_message.sh
         msg "BUILD ISO Image"
         # Check if directory exists before proceeding
