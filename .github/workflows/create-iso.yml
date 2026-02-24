@@ -763,8 +763,8 @@ jobs:
             ${{ steps.prepare-iso.outputs.upload_path }}
             ${{ env.ISO_PATH }}.md5
           #tag_name: ${{ env.ISO_TAG_NAME }}
-          tag_name: ${{ env.ISO_TAG_NAME }}-${{ github.run_id }}
-          name: ${{ steps.prepare-iso.outputs.release_name }}
+          tag_name: ${{matrix.edition}}-${{ env.ISO_TAG_NAME }}-${{ github.run_id }}
+          name: ${{ steps.prepare-iso.outputs.release_name }}-${{ matrix.edition }}-${{ github.run_id }}-${{ github.run_attempt }}
           generate_release_notes: true
           body: |
             - **Data e Hora         :** ${{ env.START_TIME }}
