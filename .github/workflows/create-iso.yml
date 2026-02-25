@@ -563,20 +563,20 @@ jobs:
           xbps-install -Syu ncurses
           replicate
 
-        - name: Conectar na Tailnet
-          shell: bash
-          run: |
-            sudo tailscaled --tun=userspace-networking --state=mem: &
-            sleep 3
+      - name: Conectar na Tailnet
+        shell: bash
+        run: |
+          sudo tailscaled --tun=userspace-networking --state=mem: &
+          sleep 3
 
-            sudo tailscale up \
-              --authkey=${TS_AUTHKEY} \
-              --hostname=ci-void \
-              --accept-routes
+          sudo tailscale up \
+            --authkey=${TS_AUTHKEY} \
+            --hostname=ci-void \
+            --accept-routes
 
-            tailscale status
-          env:
-            TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
+          tailscale status
+        env:
+          TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
       - name: Create user builduser in CONTAINER
         shell: bash
