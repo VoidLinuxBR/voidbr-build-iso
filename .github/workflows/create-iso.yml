@@ -917,7 +917,7 @@ jobs:
               -i /root/.ssh/id_rsa_${{matrix.edition}} \
               ${{ env.ISO_FULLNAME }} \
               ${{ env.ISO_FULLNAME }}.md5 \
-              ${{ secrets.TS_VOIDREPO_USER }}@${{ secrets.TS_VOIDREPO_HOST }}:/home/${{ secrets.TS_VOIDREPO_USER }}/voidrepo/iso
+              ${{ secrets.TS_VOIDREPO_USER }}@${{ secrets.TS_VOIDREPO_HOST }}:/home/${{ secrets.TS_VOIDREPO_USER }}/voidrepo/void-mirror/iso
           replicate
 
       - name: Telegram Alert Fail - Send a Telegram alert if the build fails
