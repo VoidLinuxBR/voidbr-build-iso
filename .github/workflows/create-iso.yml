@@ -931,7 +931,7 @@ jobs:
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/void/iso
           replicate
 
-      - name: Telegram Alert Fail - SCP voidrepo
+      - name: Telegram Alert Fail - SCP hostinger
         if: ${{ steps.scp_upload_hostinger.outcome == 'failure' }}
         shell: bash
         run: |
