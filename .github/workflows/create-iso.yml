@@ -262,7 +262,6 @@ jobs:
             local message="$1"
             local parse_mode="$2"
 
-            link_action=https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}
             MESSAGE="${{ github.workflow }} - $message
             <pre>
             Job         : #${GITHUB_RUN_NUMBER}
@@ -275,8 +274,7 @@ jobs:
             Release     : $RELEASE_TAG
             Tmate       : $DEBUG
             ISO Name    : $ISO_BASENAME
-            </pre>
-            <b>Link:</b> <a href='${link_action}'>Visualizar no GitHub</a>"
+            </pre>"
 
             # Remove as tags HTML e exibe o resultado no terminal
             echo -e "${green}$(sed 's/<[^>]*>//g' <<< "$MESSAGE")${reset}"
