@@ -80,6 +80,8 @@ on:
 
 env:
   TS_AUTHKEY: "${{ secrets.TS_AUTHKEY }}"
+  TS_VOIDREPO_IP: "${{ secrets.TS_VOIDREPO_IP }}"
+  TS_VOIDREPO_PORT: "${{ secrets.TS_VOIDREPO_PORT }}"
   TELEGRAM_TOKEN: "${{ secrets.TOKEN_BOT }}"
   TELEGRAM_VOIDBR_ISO_TOKEN_BOT: "${{ secrets.VOIDBR_ISO_TOKEN_BOT }}"
   #GITHUB_TOKEN: "${{ secrets.TOKEN_RELEASE }}"
@@ -866,7 +868,7 @@ jobs:
           ssh-keyscan -p 65002 -H ${{ secrets.SERVER_HOST }} >> /root/.ssh/known_hosts2
           replicate
 
-      - name: Enviar arquivo ISO para o servidor via SCP com porta customizada
+      - name: Enviar arquivo ISO para o servidor HOSTINGER via SCP com porta customizada
         if: ${{ inputs.teste_input != true }}
         shell: bash
         run: |
@@ -889,6 +891,31 @@ jobs:
               ${{ env.ISO_FULLNAME }} \
               ${{ env.ISO_FULLNAME }}.md5 \
               ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/void/iso
+          replicate
+
+      - name: Enviar arquivo ISO para o servidor VOIDREPO via SCP com porta customizada
+        if: ${{ inputs.teste_input != true }}
+        shell: bash
+        run: |
+          source /tmp/send_telegram_message.sh
+          msg "- name: Enviar arquivo ISO para o servidor via SCP com porta customizada"
+          ls -la "${{ env.ISO_PATH }}" --color=auto || true
+          ls -la "${{ env.ISO_PATH }}.md5" --color=auto || true
+          ls -la "${{ env.WORK_PATH }}/${{ env.ISO_BASENAME }}" || true
+
+          # Envia a ISO e o MD5 usando os caminhos absolutos confirmados
+          # SCP cirúrgico:
+          # 1. Usa o curinga (*) para pegar tanto a ISO única quanto partes .7z
+          # 2. BatchMode=yes para não travar pedindo senha
+          #${{ env.WORK_PATH }}/${{ steps.prepare-iso.outputs.release }}* \
+          #-o BatchMode=yes \
+          scp -P ${{ secrets.TS_VOIDREPO_PORT }} \
+              -v \
+              -o StrictHostKeyChecking=no \
+              -i /root/.ssh/id_rsa_${{matrix.edition}} \
+              ${{ env.ISO_FULLNAME }} \
+              ${{ env.ISO_FULLNAME }}.md5 \
+              ${{ secrets.TS_VOIDREPO_USER }}@${{ secrets.TS_VOIDREPO_HOST }}:/home/${{ secrets.TS_VOIDREPO_USER }}/voidrepo/iso
           replicate
 
       - name: Telegram Alert Fail - Send a Telegram alert if the build fails
