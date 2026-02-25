@@ -831,6 +831,7 @@ jobs:
           printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > /root/.ssh/id_rsa_${{matrix.edition}}
           chmod 700 /root/.ssh
           chmod 600 /root/.ssh/id_rsa_${{matrix.edition}}
+          ssh-keygen -y -f /root/.ssh/id_rsa_${{matrix.edition}} > /root/.ssh/id_rsa_${{matrix.edition}}.pub
 
           msg "Testar chave se válida:"
           ssh-keygen -l -f /root/.ssh/id_rsa_${{matrix.edition}}
