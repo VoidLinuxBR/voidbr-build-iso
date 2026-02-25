@@ -79,6 +79,7 @@ on:
     - cron: "0 18 * * 5" # Roda toda sexta-feira às 18:00 UTC
 
 env:
+  TS_AUTHKEY: "${{ secrets.TS_AUTHKEY }}"
   TELEGRAM_TOKEN: "${{ secrets.TOKEN_BOT }}"
   TELEGRAM_VOIDBR_ISO_TOKEN_BOT: "${{ secrets.VOIDBR_ISO_TOKEN_BOT }}"
   #GITHUB_TOKEN: "${{ secrets.TOKEN_RELEASE }}"
@@ -556,7 +557,8 @@ jobs:
             e2fsprogs \
             exfatprogs \
             dosfstools \
-            xfsprogs
+            xfsprogs \
+            tailscale
           vinstall -Scc
           xbps-install -Syu ncurses
           replicate
@@ -848,6 +850,22 @@ jobs:
           ssh-keyscan -p 65002 -H ${{ secrets.SERVER_HOST }} >> /root/.ssh/known_hosts
           ssh-keyscan -p 65002 -H ${{ secrets.SERVER_HOST }} >> /root/.ssh/known_hosts2
           replicate
+
+      - name: Ativar serviço tailscaled no docker/void
+        shell: bash
+        run: |
+          sudo ln -sf /etc/sv/tailscaled/ /var/service
+          sudo vsv
+
+      - name: Conectar na Tailnet
+        shell: bash
+        run: |
+          #tailscaled --state=mem: &
+          #sleep 2
+          tailscale up --authkey=${TS_AUTHKEY} --hostname=ci-void --accept-routes
+          tailscale status
+        env:
+            TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
       - name: Enviar arquivo ISO para o servidor via SCP com porta customizada
         if: ${{ inputs.teste_input != true }}
