@@ -568,15 +568,15 @@ jobs:
       - name: Conectar na Tailnet
         shell: bash
         run: |
-            sudo tailscaled --state=mem: &
-            sleep 3
+          sudo tailscaled --state=mem: &
+          sleep 3
 
-            sudo tailscale up \
-              --authkey=${TS_AUTHKEY} \
-              --hostname=ci-void \
-              --accept-routes \
-              --accept-dns=false \
-              --reset
+          sudo tailscale up \
+            --authkey=${TS_AUTHKEY} \
+            --hostname=ci-void \
+            --accept-routes \
+            --accept-dns=false \
+            --reset
 
           tailscale status
         env:
