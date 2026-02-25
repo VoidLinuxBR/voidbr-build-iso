@@ -894,9 +894,9 @@ jobs:
             ${{ env.ISO_FULLNAME }} \
             ${{ env.ISO_FULLNAME }}.md5 \
             ${{ secrets.TS_VOIDREPO_USER }}@${{ secrets.TS_VOIDREPO_HOST }}:/voidrepo/void-mirror/iso; then
-            send_telegram_message "✅ ISO enviada com sucesso via SCP para o VOIDREPO"
+            send_telegram_msg "✅ ISO enviada com sucesso via SCP para o VOIDREPO"
           else
-            send_telegram_message "❌ Falha no envio da ISO via SCP para o VOIDREPO"
+            send_telegram_msg "❌ Falha no envio da ISO via SCP para o VOIDREPO"
           fi
           replicate
 
@@ -924,9 +924,9 @@ jobs:
             ${{ env.ISO_FULLNAME }} \
             ${{ env.ISO_FULLNAME }}.md5 \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/void/iso; then
-            send_telegram_message "✅ ISO enviada com sucesso via SCP para o HOSTINGER"
+            send_telegram_msg "✅ ISO enviada com sucesso via SCP para o HOSTINGER"
           else
-            send_telegram_message "❌ Falha no envio da ISO via SCP para o HOSTINGER"
+            send_telegram_msg "❌ Falha no envio da ISO via SCP para o HOSTINGER"
           fi
           replicate
 
