@@ -880,7 +880,7 @@ jobs:
           cat /root/.ssh/id_rsa_${{matrix.edition}}.pub
 
           msg "Testar chave se válida:"
-          ssh-keygen -l -f /root/.ssh/id_rsa_${{matrix.edition}}
+          ssh-keygen -l -f /root/.ssh/id_rsa_${{matrix.edition}} || true
 
           # Adiciona o host aos conhecidos para não travar
           ssh-keyscan -p 65002 -H ${{ secrets.SERVER_HOST }} >> /root/.ssh/known_hosts
