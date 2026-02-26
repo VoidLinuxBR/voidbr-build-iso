@@ -889,7 +889,7 @@ jobs:
 
       - name: Copiar o arquivo ISO para o servidor VOIDREPO via local
         id: cp_voidrepo
-        if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
+        if: runner.os == 'Linux' && contains(runner.name, 'voidrepo')
         #if: ${{ inputs.teste_input != true }}
         shell: bash
         run: |
