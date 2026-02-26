@@ -356,6 +356,7 @@ jobs:
           replicate
 
       - name: Install dependencies in HOST
+        if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
         shell: bash
         run: |
           #Install dependencies in HOST
