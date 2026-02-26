@@ -1,0 +1,24 @@
+name: Voidrepo Debug
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: [self-hosted, voidrepo]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Mostrar ambiente
+        run: |
+          echo "User: $(whoami)"
+          echo "Host: $(hostname)"
+          uname -a
+          df -h
+
+      - name: Start tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
