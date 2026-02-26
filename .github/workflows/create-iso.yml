@@ -376,9 +376,9 @@ jobs:
         shell: bash
         run: |
           #Set up volume directory in HOST
-          sudo mkdir -p /mnt/var_lib_manjaro_tools_buildiso
-          sudo mkdir -p /mnt/var_cache_manjaro_tools_iso
-          sudo mkdir -p /mnt/lfs
+          sudo mkdir -p /voidrepo/mnt/var_lib_manjaro_tools_buildiso
+          sudo mkdir -p /voidrepo/mnt/var_cache_manjaro_tools_iso
+          sudo mkdir -p /voidrepo/mnt/lfs
 
       #      - name: Cria um arquivo de variaveis para compartilhar entre jobs
       #        shell: bash
@@ -453,9 +453,9 @@ jobs:
       image: vcatafesta/voidlinux-docker:1.5 #seg 16 fev 2026 23:52:08 -04
       options: --privileged
       volumes:
-        - /mnt/var_lib_manjaro_tools_buildiso:/var/lib/manjaro-tools/buildiso
-        - /mnt/var_cache_manjaro_tools_iso:/var/cache/manjaro-tools/iso
-        - /mnt/lfs/${{ matrix.edition }}:/mnt/lfs
+        - /voidrepo/mnt/var_lib_manjaro_tools_buildiso:/var/lib/manjaro-tools/buildiso
+        - /voidrepo/mnt/var_cache_manjaro_tools_iso:/var/cache/manjaro-tools/iso
+        - /voidrepo/mnt/lfs/${{ matrix.edition }}:/mnt/lfs
         - /voidrepo/void-mirror/iso:/voidrepo/void-mirror/iso
 
     steps:
