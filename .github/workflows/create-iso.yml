@@ -268,10 +268,6 @@ jobs:
             MESSAGE="${{ github.workflow }} - $message
             <pre>
             Job         : #${GITHUB_RUN_NUMBER}
-            Workflow    : ${{ github.workflow }}
-            Triggered   : ${started_by_user}
-            Inicio      : $START_TIME
-            Distroname  : $iso_distroname
             Edition     : $iso_edition
             ISO Name    : $ISO_BASENAME
             </pre>"
