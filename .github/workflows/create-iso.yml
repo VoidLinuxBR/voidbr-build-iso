@@ -902,6 +902,10 @@ jobs:
           # 2. BatchMode=yes para não travar pedindo senha
           #${{ env.WORK_PATH }}/${{ steps.prepare-iso.outputs.release }}* \
           #-o BatchMode=yes \
+
+          run_cmd "cp -v ${{ env.ISO_FULLNAME }} /mnt/lfs"
+          run_cmd "cp -v ${{ env.ISO_FULLNAME }}.md5 /mnt/lfs"
+
           if scp -P ${{ secrets.TS_VOIDREPO_PORT }} \
             -v \
             -o StrictHostKeyChecking=no \
