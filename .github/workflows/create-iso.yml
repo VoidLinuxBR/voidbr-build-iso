@@ -877,10 +877,9 @@ jobs:
           msg_run "ssh-keygen -l -f /root/.ssh/id_rsa_${{matrix.edition}}" || true
 
           msg "Adiciona o host aos conhecidos para não travar"
-          msg_run "
-            ssh-keyscan -p ${{ secrets.SERVER_PORT }}      -H ${{ secrets.SERVER_HOST }}      >> /root/.ssh/known_hosts || true
-            ssh-keyscan -p ${{ secrets.TS_VOIDREPO_PORT }} -H ${{ secrets.TS_VOIDREPO_HOST }} >> /root/.ssh/known_hosts || true
-          "
+          msg_run "ssh-keyscan -p ${{ secrets.SERVER_PORT }}      -H ${{ secrets.SERVER_HOST }}      >> /root/.ssh/known_hosts" || true
+          msg_run "ssh-keyscan -p ${{ secrets.TS_VOIDREPO_PORT }} -H ${{ secrets.TS_VOIDREPO_HOST }} >> /root/.ssh/known_hosts" || true
+
           replicate
 
       - name: Enviar arquivo ISO para o servidor VOIDREPO via SCP com porta customizada
