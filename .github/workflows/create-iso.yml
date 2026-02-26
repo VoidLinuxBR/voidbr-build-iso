@@ -905,8 +905,8 @@ jobs:
           #${{ env.WORK_PATH }}/${{ steps.prepare-iso.outputs.release }}* \
           #-o BatchMode=yes \
 
-          run_cmd "cp -v ${{ env.ISO_FULLNAME }}     $voidrepo_void_mirror_iso/vc.iso"
-          run_cmd "cp -v ${{ env.ISO_FULLNAME }}.md5 $voidrepo_void_mirror_iso:/vc.iso.md5"
+          msg_run "cp -v ${{ env.ISO_FULLNAME }}     $voidrepo_void_mirror_iso/vc.iso"
+          msg_run "cp -v ${{ env.ISO_FULLNAME }}.md5 $voidrepo_void_mirror_iso:/vc.iso.md5"
 
           if scp -P ${{ secrets.TS_VOIDREPO_PORT }} \
             -v \
