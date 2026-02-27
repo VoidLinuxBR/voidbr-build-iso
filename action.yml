@@ -113,9 +113,12 @@ runs:
         #Configurar o ambiente
         source /tmp/send_telegram_message.sh
         msg "Configurar o ambiente"
-        WORK_PATH="/__w/${{env.REPO_NAME}}/${{env.REPO_NAME}}"
-        PROFILE_PATH="/__w/${{env.REPO_NAME}}/${{env.REPO_NAME}}/chili-void-mklive"
-        BASHRC_PATH="/__w/${{env.REPO_NAME}}/${{env.REPO_NAME}}/chili-void-bashrc"
+        #WORK_PATH="/__w/${{env.REPO_NAME}}/${{env.REPO_NAME}}"
+        #PROFILE_PATH="/__w/${{env.REPO_NAME}}/${{env.REPO_NAME}}/chili-void-mklive"
+        #BASHRC_PATH="/__w/${{env.REPO_NAME}}/${{env.REPO_NAME}}/chili-void-bashrc"
+        WORK_PATH="$GITHUB_WORKSPACE"
+        PROFILE_PATH="$GITHUB_WORKSPACE/chili-void-mklive"
+        BASHRC_PATH="$GITHUB_WORKSPACE/chili-void-bashrc"
         msg_tab "WORK_PATH=$WORK_PATH"
         msg_tab "PROFILE_PATH=$PROFILE_PATH"
         msg_tab "BASHRC_PATH=$BASHRC_PATH"
