@@ -1090,13 +1090,6 @@ jobs:
       - name: Cleanup current workspace runner
         if: always() && runner.environment == 'self-hosted'
         run: |
-          TARGET="/voidrepo/$RUNNER_NAME/_work"
-
           echo "Runner atual: $RUNNER_NAME"
-          echo "Limpando $TARGET"
-
-          if [ -d "$TARGET" ]; then
-            sudo rm -rf "$TARGET"/*
-          else
-            echo "Diretório não encontrado: $TARGET"
-          fi
+          echo "Limpando $GITHUB_WORKKSPACE"
+          rm -rf "$GITHUB_WORKSPACE"/*
