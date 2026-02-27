@@ -1084,13 +1084,20 @@ jobs:
           send_telegram_message "$MESSAGE"
           replicate
 
-  cleanup:
-    name: Cleanup _work
-    runs-on: self-hosted
-    if: always()
-    steps:
-      - name: Wipe runner workspace
-        run: |
-          echo "Runner atual: $RUNNER_NAME"
-          echo "Limpando _work..."
-          #sudo rm -rf /voidrepo/${RUNNER_NAME}/_work/*
+cleanup:
+  name: Cleanup runner workspace
+  runs-on: self-hosted
+  if: always()
+  steps:
+    - name: Cleanup current runner
+      if: runner.os == 'Linux'
+      run: |
+        TARGET="/voidrepo/$RUNNER_NAME/_work"
+        echo "Runner atual: $RUNNER_NAME"
+        echo "Limpando $TARGET"
+
+        if [ -d "$TARGET" ]; then
+          sudo rm -rf "$TARGET"/*
+        else
+          echo "Diretório não encontrado: $TARGET"
+        fi
