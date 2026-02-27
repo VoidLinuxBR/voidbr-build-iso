@@ -897,7 +897,7 @@ jobs:
           ls -la "${{ env.WORK_PATH }}/${{ env.ISO_BASENAME }}" || true
 
           msg_run "cp -v ${{ env.ISO_FULLNAME }}.md5 $voidrepo_void_mirror_iso/" || true
-          i^[Oc^[[1;6D^T|sed 's/^[ \t]*//'f msg_run "cp -v ${{ env.ISO_FULLNAME }}  $voidrepo_void_mirror_iso/"; then
+          if sed 's/^[ \t]*//'f msg_run "cp -v ${{ env.ISO_FULLNAME }}  $voidrepo_void_mirror_iso/"; then
             send_telegram_msg "✅ ISO copiado para : $voidrepo_void_mirror_iso"
           else
             send_telegram_msg "❌ Falha ao copiar ISO para: $voidrepo_void_mirror_iso"
