@@ -358,7 +358,8 @@ jobs:
           replicate
 
       - name: Install dependencies in HOST
-        if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
+        #if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
+        if: runner.environment == 'github-hosted'
         shell: bash
         run: |
           #Install dependencies in HOST
@@ -576,7 +577,8 @@ jobs:
           replicate
 
       - name: Conectar na Tailnet
-        if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
+        #if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
+        if: runner.environment == 'github-hosted'
         shell: bash
         run: |
           sudo tailscaled &
@@ -886,7 +888,8 @@ jobs:
 
       - name: Copiar o arquivo ISO para o servidor VOIDREPO via local
         id: cp_voidrepo
-        if: runner.os == 'Linux' && contains(runner.name, 'voidrepo')
+        #if: runner.os == 'Linux' && contains(runner.name, 'voidrepo')
+        if: runner.environment == 'self-hosted'
         #if: ${{ inputs.teste_input != true }}
         shell: bash
         run: |
@@ -906,7 +909,8 @@ jobs:
 
       - name: Enviar arquivo ISO para o servidor VOIDREPO via SCP com porta customizada
         id: scp_upload_voidrepo
-        if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
+        #if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
+        if: runner.environment == 'github-hosted'
         #if: ${{ inputs.teste_input != true }}
         shell: bash
         run: |
