@@ -1086,6 +1086,7 @@ jobs:
   cleanup:
     name: Cleanup runner workspace
     runs-on: self-hosted
+    needs: [build]
     if: always()
     steps:
       - name: Cleanup current runner
