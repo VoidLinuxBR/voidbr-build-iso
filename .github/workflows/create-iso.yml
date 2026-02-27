@@ -647,7 +647,7 @@ jobs:
 
       - name: Build ISO ${{ matrix.edition }}
         if: ${{ inputs.teste_input != true }}
-        uses: ./
+        uses: ./action
         id: build
         with:
           vol_id: ${{env.vol_id}}
