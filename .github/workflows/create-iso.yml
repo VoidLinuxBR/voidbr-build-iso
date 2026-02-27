@@ -1084,7 +1084,13 @@ jobs:
           send_telegram_message "$MESSAGE"
           replicate
 
-      - name: Cleanup repo workspace
-        if: always()
+  cleanup:
+    name: Cleanup _work
+    runs-on: self-hosted
+    if: always()
+    steps:
+      - name: Wipe runner workspace
         run: |
-          rm -rf "$RUNNER_WORKSPACE"/*
+          echo "Runner atual: $RUNNER_NAME"
+          echo "Limpando _work..."
+          #sudo rm -rf /voidrepo/${RUNNER_NAME}/_work/*
