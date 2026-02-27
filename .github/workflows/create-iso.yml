@@ -1084,7 +1084,7 @@ jobs:
           replicate
 
       - name: Cleanup current workspace runner
-        if: always() && contains(runner.labels, 'self-hosted')
+        if: always() && runner.environment == 'self-hosted'
         run: |
           TARGET="/voidrepo/$RUNNER_NAME/_work"
 
