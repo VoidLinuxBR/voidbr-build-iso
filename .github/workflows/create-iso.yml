@@ -954,7 +954,6 @@ jobs:
 
           replicate
 
-
       - name: Enviar arquivo ISO para o servidor HOSTINGER via SCP com porta customizada
         id: scp_upload_hostinger
         if: ${{ inputs.teste_input != true }}
@@ -1084,20 +1083,20 @@ jobs:
           send_telegram_message "$MESSAGE"
           replicate
 
-cleanup:
-  name: Cleanup runner workspace
-  runs-on: self-hosted
-  if: always()
-  steps:
-    - name: Cleanup current runner
-      if: runner.os == 'Linux'
-      run: |
-        TARGET="/voidrepo/$RUNNER_NAME/_work"
-        echo "Runner atual: $RUNNER_NAME"
-        echo "Limpando $TARGET"
+  cleanup:
+    name: Cleanup runner workspace
+    runs-on: self-hosted
+    if: always()
+    steps:
+      - name: Cleanup current runner
+        if: runner.os == 'Linux'
+        run: |
+          TARGET="/voidrepo/$RUNNER_NAME/_work"
+          echo "Runner atual: $RUNNER_NAME"
+          echo "Limpando $TARGET"
 
-        if [ -d "$TARGET" ]; then
-          sudo rm -rf "$TARGET"/*
-        else
-          echo "Diretório não encontrado: $TARGET"
-        fi
+          if [ -d "$TARGET" ]; then
+            sudo rm -rf "$TARGET"/*
+          else
+            echo "Diretório não encontrado: $TARGET"
+          fi
