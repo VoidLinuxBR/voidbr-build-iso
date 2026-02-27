@@ -665,18 +665,7 @@ jobs:
           source /tmp/send_telegram_message.sh
           replicate
           msg "- name: Set ISO path on create-iso"
-          # Localiza a ISO no workspace sem tentar mover o arquivo
-          #temporario - para testes
-          #WORK_PATH='/__w/build-iso/build-iso'
-          #ISO_BASENAME="${iso_distroname}_${ISO_BRANCH^^}_${iso_edition}_${release_tag}.iso"
-          #{
-          #  echo "WORK_PATH=$WORK_PATH"
-          #  echo "ISO_BASENAME=$ISO_BASENAME"
-          #} >> $GITHUB_ENV
-          #echo "ISO_PATH=${WORK_PATH}/${ISO_BASENAME}" >> $GITHUB_ENV
-          #touch "${WORK_PATH}/${ISO_BASENAME}"
-          #temporario - para testes
-          echo "ISO_PATH=${{ env.WORK_PATH }}/${{ env.ISO_BASENAME }}" >> $GITHUB_ENV
+          echo "ISO_PATH=${{ env.OUTPUT_ISO_PATH_NAME }}" >> $GITHUB_ENV
 
       - name: Verificar se o arquivo .iso foi gerado corretamente
         if: ${{ inputs.teste_input != true }}
@@ -685,50 +674,45 @@ jobs:
           source /tmp/send_telegram_message.sh
           replicate
           msg "- name: Verificar se o arquivo .iso foi gerado corretamente"
-          pushd "${{ env.WORK_PATH }}" || true
-          msg_info 'ls -lah --color=auto'
-          ls -lah --color=auto
+          pushd "${{ env.MKISO_PATH }}" || true
+          msg_run 'ls -lah --color=auto'
           popd || true
           replicate
 
       - name: Calculate ISO MD5 Hash
         shell: bash
         run: |
-          # Calculate ISO MD5 Hash
           source /tmp/send_telegram_message.sh
           replicate '='
-          ls -lah --color=auto || true
-          replicate '='
+          msg "- name: Calculate ISO MD5 Hash"
+          msg_run "ls -lah --color=auto" || true
+          replicate
+
+          pushd "${{ env.MKISO_PATH }}" || true
           msg "Calculating MD5 hash for ISO file ${ISO_PATH}"
-
-          # Ajuste no pushd para usar o WORK_PATH detectado no step anterior
-          pushd "${{ env.WORK_PATH }}" || true
-
           if [[ -f "${{ env.ISO_BASENAME }}" ]]; then
             md5sum "${{ env.ISO_BASENAME }}" > "${{ env.ISO_BASENAME }}.md5"
             msg_info "MD5 '$ISO_BASENAME.md5' hash calculated and saved:"
             cat "${{ env.ISO_BASENAME }}.md5"
           else
-            msg_warning "Error: ${{ env.ISO_BASENAME }} file not found at ${{ env.WORK_PATH }}"
+            msg_warning "Error: ${{ env.ISO_BASENAME }} file not found at ${{ env.MKISO_PATH }}"
             exit 1
           fi
-
-          ls -lah --color=auto
-          replicate '='
+          msg_run "ls -lah --color=auto"
+          replicate
           popd || true
 
       - name: Prepare ISO for release (7z)
         id: prepare-iso
         shell: bash
         run: |
-          #Prepare ISO for release (7z)
           source /tmp/send_telegram_message.sh
           replicate
           msg "- name: Prepare ISO for release (7z)"
           MESSAGE="⏳ <b>[step 2/3] - Prepare ISO for release (7z)</b>"
           send_telegram_message "$MESSAGE"
           replicate '='
-          ls -lah
+          msg_run "ls -lah --color=auto"
           release=$(basename "${ISO_PATH}" .iso)
           release_name="${release}"
 
@@ -792,7 +776,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            #${{ env.WORK_PATH }}/${{ steps.prepare-iso.outputs.release }}*
+            #${{ env.MKISO_PATH }}/${{ steps.prepare-iso.outputs.release }}*
             ${{ steps.prepare-iso.outputs.upload_path }}
             ${{ env.ISO_PATH }}.md5
           #tag_name: ${{ env.ISO_TAG_NAME }}
@@ -892,13 +876,10 @@ jobs:
         shell: bash
         run: |
           source /tmp/send_telegram_message.sh
+          replicate
           msg "- name: Copiar o arquivo ISO para o servidor VOIDREPO via local"
-          ls -la "${{ env.ISO_PATH }}" --color=auto || true
-          ls -la "${{ env.ISO_PATH }}.md5" --color=auto || true
-          ls -la "${{ env.WORK_PATH }}/${{ env.ISO_BASENAME }}" || true
-
           msg_run "cp -v ${{ env.ISO_FULLNAME }}.md5 $voidrepo_void_mirror_iso/" || true
-          if sed 's/^[ \t]*//'f msg_run "cp -v ${{ env.ISO_FULLNAME }}  $voidrepo_void_mirror_iso/"; then
+          if msg_run "cp -v ${{ env.ISO_FULLNAME }}  $voidrepo_void_mirror_iso/"; then
             send_telegram_msg "✅ ISO copiado para : $voidrepo_void_mirror_iso"
           else
             send_telegram_msg "❌ Falha ao copiar ISO para: $voidrepo_void_mirror_iso"
@@ -913,18 +894,14 @@ jobs:
         shell: bash
         run: |
           source /tmp/send_telegram_message.sh
+          replicate
           msg "- name: Enviar arquivo ISO para o servidor via SCP com porta customizada"
-          ls -la "${{ env.ISO_PATH }}" --color=auto || true
-          ls -la "${{ env.ISO_PATH }}.md5" --color=auto || true
-          ls -la "${{ env.WORK_PATH }}/${{ env.ISO_BASENAME }}" || true
-
           # Envia a ISO e o MD5 usando os caminhos absolutos confirmados
           # SCP cirúrgico:
           # 1. Usa o curinga (*) para pegar tanto a ISO única quanto partes .7z
           # 2. BatchMode=yes para não travar pedindo senha
           #${{ env.WORK_PATH }}/${{ steps.prepare-iso.outputs.release }}* \
           #-o BatchMode=yes \
-
           msg_run "cp -v ${{ env.ISO_FULLNAME }}     $voidrepo_void_mirror_iso/vc.iso"
           msg_run "cp -v ${{ env.ISO_FULLNAME }}.md5 $voidrepo_void_mirror_iso/vc.iso.md5"
 
@@ -960,11 +937,8 @@ jobs:
         shell: bash
         run: |
           source /tmp/send_telegram_message.sh
+          replicate
           msg "- name: Enviar arquivo ISO para o servidor via SCP com porta customizada"
-          ls -la "${{ env.ISO_PATH }}" --color=auto || true
-          ls -la "${{ env.ISO_PATH }}.md5" --color=auto || true
-          ls -la "${{ env.WORK_PATH }}/${{ env.ISO_BASENAME }}" || true
-
           # Envia a ISO e o MD5 usando os caminhos absolutos confirmados
           # SCP cirúrgico:
           # 1. Usa o curinga (*) para pegar tanto a ISO única quanto partes .7z
