@@ -1,6 +1,7 @@
 #  create-iso.yml
 #  Created: 2024/09/15 - 08:10
 #  Altered: qui 19 fev 2026 21:40:30 -04
+#  Updated: sex 27 fev 2026 00:42:57 -04
 #
 #  Copyright (c) 2024-2026, Vilmar Catafesta <vcatafesta@gmail.com>
 #  All rights reserved.
@@ -415,20 +416,13 @@ jobs:
         shell: bash
         run: |
           source /tmp/send_telegram_message.sh
-          replicate
           msg "- name: Display the current user in HOST"
-          echo "#########################################"
-          echo "Current host is: $(hostname)"
-          echo "Current user is: $(whoami)"
-          echo "Current user ID is: $(id -u)"
-          echo "Current user details:"
+          replicate
+          msg_raw "Current host is    : $(hostname)"
+          msg_raw "Current user is    : $(whoami)"
+          msg_raw "Current user ID is : $(id -u)"
+          msg_raw "Current user details:"
           id
-          echo "#########################################"
-          #df -hT
-          duf
-          echo "#########################################"
-          ls
-          echo "#########################################"
           replicate
 
   build:
@@ -488,6 +482,7 @@ jobs:
           name: shared-file
 
       - name: Exibir e carregar variáveis do arquivo shared_file.txt no CONTAINER
+        if: ${{ env.DEBUG == 'true' }}
         shell: bash
         run: |
           source /tmp/send_telegram_message.sh
@@ -581,6 +576,7 @@ jobs:
           replicate
 
       - name: Conectar na Tailnet
+        if: runner.os == 'Linux' && !contains(runner.name, 'voidrepo')
         shell: bash
         run: |
           sudo tailscaled &
@@ -610,6 +606,7 @@ jobs:
           replicate
 
       - name: Initial Debug in CONTAINER
+        if: ${{ env.DEBUG == 'true' }}
         env:
           EVENT_JSON: ${{ toJson(github.event) }}
         shell: bash
@@ -627,6 +624,7 @@ jobs:
           replicate
 
       - name: Display the current user in CONTAINER
+        if: ${{ env.DEBUG == 'true' }}
         shell: bash
         run: |
           source /tmp/send_telegram_message.sh
@@ -638,14 +636,13 @@ jobs:
           echo "Current user ID is: $(id -u)"
           echo "Current user details:"
           id
-          echo "#########################################"
+          replicate
           #df -hT
           duf
-          echo "#########################################"
-          ls -lah --color=auto /mnt
-          echo "#########################################"
-          tree -d /mnt
-          echo "#########################################"
+          #replicate
+          #ls -lah --color=auto /mnt
+          #replicate
+          ##tree -d /mnt
           replicate
 
       - name: Build ISO ${{ matrix.edition }}
