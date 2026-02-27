@@ -255,8 +255,6 @@ jobs:
             local char=${1:-'#'}
             local nsize=${2:-$(tput cols)}
             local line
-            #printf -v line "%*s" "$nsize" && echo "${line// /$char}"
-            #printf -v line "%*s" "$nsize" && echo -e "\033[31m${line// /$char}\033[0m"
             printf -v line "%*s" "$nsize" && echo -e "${blue}${line// /$char}${reset}"
           }
           export -f replicate
@@ -930,8 +928,11 @@ jobs:
           msg_run "cp -v ${{ env.ISO_FULLNAME }}     $voidrepo_void_mirror_iso/vc.iso"
           msg_run "cp -v ${{ env.ISO_FULLNAME }}.md5 $voidrepo_void_mirror_iso/vc.iso.md5"
 
+          verbose=''
+          $DEBUG && verbose='-v'
+
           if scp -P ${{ secrets.TS_VOIDREPO_PORT }} \
-            -v \
+            $verbose \
             -o StrictHostKeyChecking=no \
             -i /root/.ssh/id_rsa_${{matrix.edition}} \
             ${{ env.ISO_FULLNAME }} \
@@ -943,7 +944,6 @@ jobs:
           fi
           replicate
 
-      - name: Enviar arquivo ISO para o servidor HOSTINGER via SCP com porta customizada
         id: scp_upload_hostinger
         if: ${{ inputs.teste_input != true }}
         shell: bash
@@ -960,8 +960,12 @@ jobs:
           # 2. BatchMode=yes para não travar pedindo senha
           #${{ env.WORK_PATH }}/${{ steps.prepare-iso.outputs.release }}* \
           #-o BatchMode=yes \
+
+          verbose=''
+          $DEBUG && verbose='-v'
+
           if scp -P ${{ secrets.SERVER_PORT }} \
-            -v \
+            $verbose \
             -o StrictHostKeyChecking=no \
             -i /root/.ssh/id_rsa_${{matrix.edition}} \
             ${{ env.ISO_FULLNAME }} \
