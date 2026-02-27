@@ -647,7 +647,7 @@ jobs:
 
       - name: Build ISO ${{ matrix.edition }}
         if: ${{ inputs.teste_input != true }}
-        uses: ./
+        uses: ./action
         id: build
         with:
           vol_id: ${{env.vol_id}}
@@ -665,17 +665,6 @@ jobs:
           source /tmp/send_telegram_message.sh
           replicate
           msg "- name: Set ISO path on create-iso"
-          # Localiza a ISO no workspace sem tentar mover o arquivo
-          #temporario - para testes
-          #WORK_PATH='/__w/build-iso/build-iso'
-          #ISO_BASENAME="${iso_distroname}_${ISO_BRANCH^^}_${iso_edition}_${release_tag}.iso"
-          #{
-          #  echo "WORK_PATH=$WORK_PATH"
-          #  echo "ISO_BASENAME=$ISO_BASENAME"
-          #} >> $GITHUB_ENV
-          #echo "ISO_PATH=${WORK_PATH}/${ISO_BASENAME}" >> $GITHUB_ENV
-          #touch "${WORK_PATH}/${ISO_BASENAME}"
-          #temporario - para testes
           echo "ISO_PATH=${{ env.WORK_PATH }}/${{ env.ISO_BASENAME }}" >> $GITHUB_ENV
 
       - name: Verificar se o arquivo .iso foi gerado corretamente
@@ -686,22 +675,20 @@ jobs:
           replicate
           msg "- name: Verificar se o arquivo .iso foi gerado corretamente"
           pushd "${{ env.WORK_PATH }}" || true
-          msg_info 'ls -lah --color=auto'
-          ls -lah --color=auto
+          msg_run 'ls -lah --color=auto'
           popd || true
           replicate
 
       - name: Calculate ISO MD5 Hash
         shell: bash
         run: |
-          # Calculate ISO MD5 Hash
           source /tmp/send_telegram_message.sh
-          replicate '='
-          ls -lah --color=auto || true
-          replicate '='
-          msg "Calculating MD5 hash for ISO file ${ISO_PATH}"
+          replicate
+          msg "- name: Calculate ISO MD5 Hash"
+          msg_run "ls -lah --color=auto"
+          replicate
 
-          # Ajuste no pushd para usar o WORK_PATH detectado no step anterior
+          msg "Calculating MD5 hash for ISO file ${ISO_PATH}"
           pushd "${{ env.WORK_PATH }}" || true
 
           if [[ -f "${{ env.ISO_BASENAME }}" ]]; then
@@ -713,8 +700,8 @@ jobs:
             exit 1
           fi
 
-          ls -lah --color=auto
-          replicate '='
+          msg_run "ls -lah --color=auto"
+          replicate
           popd || true
 
       - name: Prepare ISO for release (7z)
