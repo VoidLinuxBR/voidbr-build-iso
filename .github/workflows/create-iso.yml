@@ -928,28 +928,32 @@ jobs:
           msg_run "cp -v ${{ env.ISO_FULLNAME }}     $voidrepo_void_mirror_iso/vc.iso"
           msg_run "cp -v ${{ env.ISO_FULLNAME }}.md5 $voidrepo_void_mirror_iso/vc.iso.md5"
 
+          # Monta comando como array
+          cmd=(
+            scp
+            -P "${{ secrets.TS_VOIDREPO_PORT }}"
+            -o StrictHostKeyChecking=no
+            -i "/root/.ssh/id_rsa_${{ matrix.edition }}"
+          )
+
+          # Adiciona -v se DEBUG=true
           if $DEBUG; then
-            local cmd="scp -P ${{ secrets.TS_VOIDREPO_PORT }} \
-              -v \
-              -o StrictHostKeyChecking=no \
-              -i /root/.ssh/id_rsa_${{matrix.edition}}
-            "
-          else
-            local cmd="scp -P ${{ secrets.TS_VOIDREPO_PORT }} \
-              -o StrictHostKeyChecking=no \
-              -i /root/.ssh/id_rsa_${{matrix.edition}}
-            "
+            cmd+=(-v)
           fi
 
-          if "$cmd" \
-            ${{ env.ISO_FULLNAME }} \
-            ${{ env.ISO_FULLNAME }}.md5 \
-            ${{ secrets.TS_VOIDREPO_USER }}@${{ secrets.TS_VOIDREPO_HOST }}:/voidrepo/void-mirror/iso; then
+          # Executa
+          if "${cmd[@]}" \
+            "${{ env.ISO_FULLNAME }}" \
+            "${{ env.ISO_FULLNAME }}.md5" \
+            "${{ secrets.TS_VOIDREPO_USER }}@${{ secrets.TS_VOIDREPO_HOST }}:/voidrepo/void-mirror/iso"
+          then
             send_telegram_msg "✅ ISO enviada para VOIDREPO"
           else
             send_telegram_msg "❌ Falha no envio ISO para VOIDREPO"
           fi
+
           replicate
+
 
         id: scp_upload_hostinger
         if: ${{ inputs.teste_input != true }}
