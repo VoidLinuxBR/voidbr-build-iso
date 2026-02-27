@@ -452,13 +452,6 @@ jobs:
         - /voidrepo/void-mirror/iso:/voidrepo/void-mirror/iso
 
     steps:
-      # 1️⃣ Limpa TUDO do workspace do repo
-      - name: Hard clean workspace
-        shell: bash
-        run:
-          echo "WORK_PATH=$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
-          rm -rfv "$WORK_PATH"
-
       - name: Check DEBUG Condition
         if: ${{ env.DEBUG == 'true' }}
         shell: bash
