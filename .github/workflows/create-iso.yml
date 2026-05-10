@@ -605,7 +605,7 @@ jobs:
               'https://void.voidlinux.com.br/voidlinux/current')
                 entries=(
                   "$repo"
-                  'https://void.voidlinux.com.br/voidlinux/extra')
+                  'https://void.voidlinux.com.br/voidlinux/extra'
                   "$repo/nonfree"
                   "$repo/multilib"
                   "$repo/multilib/nonfree"
