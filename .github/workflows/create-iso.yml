@@ -687,16 +687,16 @@ jobs:
         shell: bash
         run: |
           sudo tailscaled &
-          sleep 3
+          sleep 3 || true
 
           sudo tailscale up \
             --authkey=${TS_AUTHKEY} \
             --hostname=ci-void \
             --accept-routes \
             --accept-dns=false \
-            --reset
+            --reset || true
 
-          tailscale status
+          tailscale status || true
         env:
           TS_AUTHKEY: ${{ secrets.TS_AUTHKEY }}
 
